@@ -1,20 +1,68 @@
-﻿// SocketChat.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
+﻿#include <iostream>
+#include <Winsock2.h>
+#include <Windows.h>
+#pragma comment(lib, "wsock32.lib")
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+#define ipv4 AF_INET
+#define ipv6 AF_INET6
+#define tcp SOCK_STREAM
 
-#include <iostream>
+#pragma comment(lib, "ws2_32")
+#define udp SOCK_DGRAM
 
+
+using namespace std;
+class net
+{
+	SOCKET sock;
+	sockaddr_in6 addr;
+public:
+	net() {}
+	net(char* ip, int hton, int ipt, int type) { init(ip, hton, ipt, type); }
+	int init(char* ip, int hton, int ipt, int type)
+	{
+		WSADATA wsaData;
+		if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+		{
+			printf("Failed to load Winsock.\\n");
+			return (-1);
+		}
+		sock = socket(ipt, type, IPPROTO_TCP);
+		inet_pton(ipt, ip, &addr.sin6_addr);
+		addr.sin6_family = ipt;
+		addr.sin6_scope_id = 10;
+		addr.sin6_port = htons(hton);
+		return 0;
+	}
+	int connects()
+	{
+		int len = sizeof(sockaddr_in);
+		if (connect(sock, (sockaddr*)&addr, len) == SOCKET_ERROR)
+		{
+			cout << "connect  error:" << WSAGetLastError() << endl;
+			return -1;
+		}
+		return 0;
+	}
+	void sends(const char* buf)
+	{
+		send(sock, buf, strlen(buf), 0);
+	}
+	string recvs()
+	{
+		char ch[1000];
+		recv(sock, ch, 100, 0);
+		string str;
+		str = ch;
+		return str;
+	}
+};
 int main()
 {
-    std::cout << "Hello World!\n";
+	char a[100] = "127.0.0.1";
+	net s(a, 993, ipv6, tcp);
+	s.connects();
+	cout << s.recvs() << endl;
+	return 0;
 }
-
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
