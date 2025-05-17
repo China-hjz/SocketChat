@@ -7,10 +7,8 @@
 #define ipv4 AF_INET
 #define ipv6 AF_INET6
 #define tcp SOCK_STREAM
-
 #pragma comment(lib, "ws2_32")
 #define udp SOCK_DGRAM
-
 
 using namespace std;
 class net
