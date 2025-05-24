@@ -11,13 +11,4 @@
 #define tcp SOCK_STREAM
 #pragma comment(lib, "ws2_32")
 #define udp SOCK_DGRAM
-#include <filesystem>
-#include <chrono>
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <fstream>
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/basic_file_sink.h>
-using namespace std;
-using namespace std::filesystem;
+
