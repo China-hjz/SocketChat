@@ -1,5 +1,5 @@
 # SocketChat
-基于UDP协议的Socket局域网终端聊天程序
+基于UDP协议的Socket局域网简单终端聊天程序
 
 ## 功能
 
